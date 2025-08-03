@@ -1,0 +1,25 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
+
+# Node/Web (если будешь подключать)
+node_modules/
+
+# Build artifacts
+dist/
+build/
+*.wasm
+
+# Chess engine temp
+engine/stockfish*.js.map
+engine/*.wasm.map
+
+# System
+*.swp
+*.tmp
