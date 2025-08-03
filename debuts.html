@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Изучение дебютов</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .debut-card {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 400px;
+      text-align: left;
+    }
+
+    .debut-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .debut-desc {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 16px;
+    }
+
+    .study-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .study-btn:hover {
+      background-color: #45a049;
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 40px;
+      color: #333;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Выберите дебют для изучения</h1>
+
+  <div class="debut-card">
+    <div class="debut-title">Итальянская партия</div>
+    <div class="debut-desc">Открытая игра, направленная на быстрое развитие и контроль центра.</div>
+    <button class="study-btn" onclick="alert('Переход к обучению Итальянской партии')">Изучать</button>
+  </div>
+
+  <div class="debut-card">
+    <div class="debut-title">Сицилианская защита</div>
+    <div class="debut-desc">Один из самых популярных ответов чёрных на 1.e4, направленный на контратаку.</div>
+    <button class="study-btn" onclick="alert('Переход к обучению Сицилианской защите')">Изучать</button>
+  </div>
+
+  <div class="debut-card">
+    <div class="debut-title">Французская защита</div>
+    <div class="debut-desc">Надёжный, позиционный ответ на 1.e4, позволяющий бороться за центр.</div>
+    <button class="study-btn" onclick="alert('Переход к обучению Французской защите')">Изучать</button>
+  </div>
+
+  <a href="index.html" class="back-link">← Вернуться на главный экран</a>
+
+</body>
+
+</html>

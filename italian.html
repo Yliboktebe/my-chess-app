@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Итальянская партия</title>
+
+  <!-- Стили -->
+  <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <h1>Итальянская партия</h1>
+
+  <!-- Шкала прогресса -->
+  <div class="progress-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" style="width: 0%;"></div>
+      <div class="progress-percent">0%</div>
+    </div>
+  </div>
+
+  <!-- История ходов -->
+  <div class="history-container">
+    <div class="scroll-wrapper" id="history">
+      <span style="opacity: 0.3">1. ...</span>
+    </div>
+  </div>
+
+
+  <!-- Основной блок: Шкала оценки + доска -->
+  <div class="container">
+    <div class="eval-bar">
+      <div id="evalBlack" class="eval-indicator" style="height: 50%;"></div>
+      <div id="evalWhite" class="eval-indicator" style="height: 50%;"></div>
+    </div>
+    <div id="chessboard"></div>
+  </div>
+
+  <!-- Кнопки управления -->
+  <div class="controls">
+    <button id="hintBtn">💡 Подсказка</button>
+    <button id="undoBtn">← Назад</button>
+    <button id="resetBtn">↺ Начать заново</button>
+  </div>
+
+  <!-- Подсказка от движка -->
+  <div id="engineSuggestion">Подсказка от движка появится здесь.</div>
+
+  <!-- Возврат -->
+  <a href="debuts.html" class="back-link">← Вернуться к списку дебютов</a>
+
+  <!-- Скрипты -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+  <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+  <script type="module" src="js/core/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,178 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f1ed;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.eval-bar {
+  width: 30px;
+  height: 400px;
+  border: 1px solid #ccc;
+  margin-right: 20px;
+  position: relative;
+  background: #f0f0f0;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: height 0.4s ease;
+}
+
+.eval-indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  transition: height 0.4s ease;
+}
+
+#evalWhite {
+  bottom: 0;
+  background: white;
+}
+
+#evalBlack {
+  top: 0;
+  background: black;
+}
+
+#chessboard {
+  width: 480px;
+  /* Удалена синяя рамка */
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.controls button {
+  padding: 10px 18px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #4a90e2;
+  color: white;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+
+.controls button:hover {
+  background-color: #357abd;
+  transform: scale(1.02);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+#engineSuggestion {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 16px;
+  color: #2c3e50;
+  background-color: #eaf6ff;
+  padding: 10px;
+  border-radius: 6px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* История ходов */
+.history-container {
+  width: 100%;
+  margin: 20px auto 10px;
+  text-align: center;
+}
+
+.scroll-wrapper {
+  overflow-x: scroll;         /* ← всегда есть скролл */
+  overflow-y: hidden;
+  white-space: nowrap;
+  width: 480px;
+  margin: 0 auto;
+  padding: 6px 0;             /* убираем лишнее */
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  min-height: 32px;           /* фикс по высоте */
+  scrollbar-width: thin;      /* для Firefox */
+}
+
+
+
+.scroll-wrapper span {
+  margin: 0 6px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.scroll-wrapper span:hover {
+  background-color: #e1f5fe;
+}
+
+/* Шкала прогресса */
+.progress-wrapper {
+  margin: 10px auto 20px;
+  width: fit-content;
+  text-align: center;
+}
+
+.progress-bar-container {
+  width: 480px;
+  height: 20px;
+  background-color: #ddd;
+  border-radius: 10px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background-color: #4caf50;
+  border-radius: 10px 0 0 10px;
+  transition: width 0.5s ease;
+}
+
+.progress-percent {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Ссылка "Вернуться к дебютам" */
+.back-link {
+  display: block;
+  width: 480px;
+  margin: 30px auto 0;
+  text-align: center;
+  font-size: 15px;
+  color: #4a90e2;
+  text-decoration: none;
+  transition: color 0.3s, text-decoration 0.3s;
+}
+
+.back-link:hover {
+  color: #357abd;
+  text-decoration: underline;
+}
