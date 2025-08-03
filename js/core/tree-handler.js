@@ -1,22 +1,29 @@
 // js/core/tree-handler.js
 
-import { italianTree } from '../trees/italiantrees.js';
 import { showSuggestion } from './ui.js';
 import { evaluatePosition } from './engine.js';
 
-let currentNode = italianTree;
+let currentTree = null;
+let currentNode = null;
+
+/**
+ * Сброс дерева и установка корня.
+ * Вызывается из main.js: resetTree(debutTree);
+ */
+export function resetTree(tree) {
+    currentTree = tree;
+    currentNode = tree;
+}
 
 /**
  * Установка текущего узла дерева по последовательности ходов.
- * Начинает с `italianTree`, если его `move` входит в цепочку.
+ * Вызывается после playOpeningLine: setTreeRootByMoveSequence(moves);
  */
 export function setTreeRootByMoveSequence(moves) {
-    let node = italianTree;
+    let node = currentTree;
 
     for (const move of moves) {
-        // если текущий узел сам является этим ходом — пропускаем
         if (node.move === move) continue;
-
         if (!node.replies) {
             currentNode = null;
             return;
@@ -35,7 +42,7 @@ export function setTreeRootByMoveSequence(moves) {
 }
 
 /**
- * Проверка хода в теории
+ * Проверка: ход в теории?
  */
 export function checkMoveInTheory(moveSan, game) {
     if (!currentNode || !currentNode.replies) {
@@ -79,11 +86,4 @@ export function getNextMoveFromTree() {
         return currentNode.replies[0].move;
     }
     return null;
-}
-
-/**
- * Сброс дерева (например, при нажатии "Сброс")
- */
-export function resetTree() {
-    currentNode = italianTree;
 }

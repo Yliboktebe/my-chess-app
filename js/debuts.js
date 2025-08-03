@@ -3,7 +3,7 @@ export const debutsList = [
         id: "italian",
         name: "Итальянская партия",
         description: "Классический дебют с быстрым развитием фигур.",
-        file: "italiantrees.js",
+        file: "italian/index",
         difficulty: 1,
         tags: ["классика", "начинающим"]
     },

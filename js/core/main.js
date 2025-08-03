@@ -23,8 +23,9 @@ document.getElementById("page-title").innerText = debutMeta.name;
 document.getElementById("page-header").innerText = debutMeta.name;
 
 // === 2. Загружаем дерево ===
-const { debutTree } = await import(`../trees/${debutMeta.file}`);
+const { debutTree } = await import(`../trees/${debutMeta.file}.js`);
 resetTree(debutTree);
+
 
 // === 3. Получаем стартовую последовательность из дерева (если есть) ===
 openingLine = Array.isArray(debutTree?.openingLine) ? debutTree.openingLine : [];

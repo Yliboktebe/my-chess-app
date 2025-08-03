@@ -1,5 +1,3 @@
-import { game } from './main.js';
-
 export let board = null;
 
 export function initializeBoard(gameInstance, onDropCallback) {
