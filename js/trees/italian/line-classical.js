@@ -1,11 +1,21 @@
-export const lineClassical = {
+// js/trees/italian/line-classical.js
+export const classicalLine = {
     move: "Bc5",
-    comment: "Классическое развитие фигуры — основная линия Итальянской партии.",
+    comment: "Классическая линия. Играем по теории.",
     replies: [
         {
             move: "c3",
-            comment: "Подготовка хода d4 для захвата центра.",
-            replies: []
+            comment: "Белые подготавливают d4.",
+            replies: [
+                {
+                    move: "Nf6",
+                    comment: "Чёрные развивают фигуру и готовятся к рокировке.",
+                    replies: [
+                        // ...
+                    ]
+                }
+            ]
         }
     ]
 };
+

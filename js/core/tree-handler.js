@@ -12,7 +12,7 @@ let currentNode = null;
  */
 export function resetTree(tree) {
     currentTree = tree;
-    currentNode = tree;
+    currentNode = tree.root;
 }
 
 /**
@@ -20,7 +20,7 @@ export function resetTree(tree) {
  * Вызывается после playOpeningLine: setTreeRootByMoveSequence(moves);
  */
 export function setTreeRootByMoveSequence(moves) {
-    let node = currentTree;
+    let node = currentTree.root;
 
     for (const move of moves) {
         if (node.move === move) continue;
