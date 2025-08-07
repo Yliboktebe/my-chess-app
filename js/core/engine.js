@@ -1,19 +1,39 @@
 // Создаём Web Worker с движком
 const stockfish = new Worker("engine/stockfish-17-single.js");
 
-// Инициализируем UCI-протокол
-stockfish.postMessage("uci");
-stockfish.postMessage("isready");
+let isReady = false;
+let isInitialized = false;
+let pendingCommands = [];
 
 let bestMoveCallback = null;
 let evalTimeout = null;
 let isEvaluating = false; // 🛡 защита от перегрузки
 
+// Безопасная отправка команд в движок
+function sendToEngine(command) {
+    if (isReady) {
+        stockfish.postMessage(command);
+    } else {
+        pendingCommands.push(command);
+    }
+}
+
 // Обработка всех сообщений от движка
 stockfish.onmessage = function (event) {
     const line = event.data;
-
     console.log("SF:", line);
+
+    if (line === "uciok") {
+        isInitialized = true;
+        stockfish.postMessage("isready");
+    }
+
+    if (line === "readyok") {
+        isReady = true;
+        // Выполнить отложенные команды
+        pendingCommands.forEach(cmd => stockfish.postMessage(cmd));
+        pendingCommands = [];
+    }
 
     // Если движок выдал лучший ход
     if (line.startsWith("bestmove") && bestMoveCallback) {
@@ -47,15 +67,18 @@ stockfish.onmessage = function (event) {
     }
 };
 
+// Инициализация движка
+stockfish.postMessage("uci");
+
 // Отправка позиции и запрос оценки (только для шкалы)
 export function evaluatePosition(fen) {
     if (isEvaluating) return;
     isEvaluating = true;
 
-    stockfish.postMessage("stop");
-    stockfish.postMessage("ucinewgame");
-    stockfish.postMessage("position fen " + fen);
-    stockfish.postMessage("go depth 12");
+    sendToEngine("stop");
+    sendToEngine("ucinewgame");
+    sendToEngine("position fen " + fen);
+    sendToEngine("go depth 12");
 
     // страховка: сброс блокировки, если движок зависнет
     setTimeout(() => {
@@ -67,10 +90,10 @@ export function evaluatePosition(fen) {
 export function getBestMoveFromEngine(fen, callback) {
     bestMoveCallback = callback;
 
-    stockfish.postMessage("stop");
-    stockfish.postMessage("ucinewgame");
-    stockfish.postMessage("position fen " + fen);
-    stockfish.postMessage("go depth 12");
+    sendToEngine("stop");
+    sendToEngine("ucinewgame");
+    sendToEngine("position fen " + fen);
+    sendToEngine("go depth 12");
 }
 
 // Обновление графической шкалы оценки позиции
@@ -85,4 +108,5 @@ function updateEvalBar(score) {
     document.getElementById('evalWhite').style.height = `${whiteHeight}%`;
     document.getElementById('evalBlack').style.height = `${blackHeight}%`;
 }
+
 

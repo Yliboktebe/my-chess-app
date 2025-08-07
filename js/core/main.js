@@ -1,7 +1,14 @@
 import { initializeBoard, board } from './board.js';
 import { evaluatePosition, getBestMoveFromEngine } from './engine.js';
 import { updateHistoryDisplay, showSuggestion } from './ui.js';
-import { checkMoveInTheory, resetTree, getNextMoveFromTree, setTreeRootByMoveSequence } from './tree-handler.js';
+import {
+    checkMoveInTheory,
+    resetTree,
+    getNextMoveFromTree,
+    setTreeRootByMoveSequence,
+    getExpectedMoves,
+    getTheoryComment
+} from './tree-handler.js';
 import { debutsList } from '../debuts.js';
 
 export const game = new Chess();
@@ -9,31 +16,56 @@ export let moveHistory = [];
 
 let openingLine = [];
 
-// === 1. Определяем дебют по URL ===
+// Получаем id дебюта из URL
 const params = new URLSearchParams(window.location.search);
 const debutId = params.get("debut");
 
+// Находим метаинформацию по дебюту
 const debutMeta = debutsList.find(d => d.id === debutId);
 if (!debutMeta) {
     alert("Ошибка: дебют не найден");
     throw new Error("Unknown debut: " + debutId);
 }
 
+// Устанавливаем заголовки на странице
 document.getElementById("page-title").innerText = debutMeta.name;
 document.getElementById("page-header").innerText = debutMeta.name;
 
-// === 2. Загружаем дерево ===
-const { debutTree } = await import(`../trees/${debutMeta.file}.js`);
+// ✅ Импортируем модуль дебюта через import.meta.glob()
+const debutModules = import.meta.glob('../trees/**/index.js');
+const debutPath = `../trees/${debutId}/index.js`;
+
+if (!(debutPath in debutModules)) {
+    alert("Ошибка: файл дебюта не найден.");
+    throw new Error("Missing debut module: " + debutPath);
+}
+
+const module = await debutModules[debutPath]();
+const debutTree = module.debutTree || await module.loadTree?.(); // поддержка async fetch
+
 resetTree(debutTree);
-
-
-// === 3. Получаем стартовую последовательность из дерева (если есть) ===
 openingLine = Array.isArray(debutTree?.openingLine) ? debutTree.openingLine : [];
 
 initializeBoard(game, onDrop);
 playOpeningLine();
 
-// === 4. Автоматическое воспроизведение начала партии ===
+function updateSuggestion() {
+    const expected = getExpectedMoves();
+    const comment = getTheoryComment();
+
+    if (game.turn() === 'w') {
+        if (expected.length === 0) {
+            showSuggestion("Вы вышли из теории. Подключён движок.");
+        } else if (expected.length === 1) {
+            showSuggestion("Ваш ход по теории: " + expected[0]);
+        } else {
+            showSuggestion("Выберите один из ходов: " + expected.join(", "));
+        }
+    } else if (comment) {
+        showSuggestion(comment);
+    }
+}
+
 function playOpeningLine() {
     let i = 0;
 
@@ -43,7 +75,7 @@ function playOpeningLine() {
             evaluatePosition(game.fen());
 
             if (game.turn() === 'w') {
-                showSuggestion("Ваш ход. Следуем по теории.");
+                updateSuggestion();
             } else if (game.turn() === 'b') {
                 setTimeout(() => makeAutoReply(), 400);
             }
@@ -55,17 +87,14 @@ function playOpeningLine() {
             moveHistory.push(move.san);
             board.position(game.fen());
             updateHistoryDisplay(game);
-
-            const delay = i === 0 ? 1000 : 600;
             i++;
-            setTimeout(playNext, delay);
+            setTimeout(playNext, i === 1 ? 1000 : 600);
         }
     }
 
     playNext();
 }
 
-// === 5. Обработка пользовательского хода ===
 function onDrop(source, target) {
     if (game.turn() !== 'w') return 'snapback';
 
@@ -77,17 +106,18 @@ function onDrop(source, target) {
 
     const isTheoryMove = checkMoveInTheory(move.san, game);
 
-    if (!isTheoryMove) {
-        showSuggestion("Вы вышли из теории. Подключён движок.");
-        evaluatePosition(game.fen());
-        setTimeout(() => makeAutoReply(), 300);
-        return;
-    }
-
-    setTimeout(() => makeAutoReply(), 300);
+    setTimeout(() => {
+        if (isTheoryMove) {
+            updateSuggestion();
+            makeAutoReply();
+        } else {
+            showSuggestion("Вы вышли из теории. Подключён движок.");
+            evaluatePosition(game.fen());
+            makeAutoReply();
+        }
+    }, 100);
 }
 
-// === 6. Ответ чёрных ===
 function makeAutoReply() {
     if (game.turn() !== 'b') return;
 
@@ -99,6 +129,7 @@ function makeAutoReply() {
             board.position(game.fen());
             updateHistoryDisplay(game);
             checkMoveInTheory(move.san, game);
+            updateSuggestion();
         }
     } else {
         getBestMoveFromEngine(game.fen(), (bestMoveUci) => {
@@ -119,29 +150,25 @@ function makeAutoReply() {
     }
 }
 
-// === 7. Кнопка "Назад" ===
 document.getElementById('undoBtn').addEventListener('click', () => {
     game.undo(); game.undo();
     moveHistory.pop(); moveHistory.pop();
     board.position(game.fen());
     updateHistoryDisplay(game);
     evaluatePosition(game.fen());
-    showSuggestion("Ходы отменены.");
     resetTree(debutTree);
+    showSuggestion("Ходы отменены.");
+    updateSuggestion();
 });
 
-// === 8. Кнопка "Начать заново" ===
 document.getElementById('resetBtn').addEventListener('click', () => {
     game.reset();
     moveHistory = [];
     board.start();
     updateHistoryDisplay(game);
     evaluatePosition(game.fen());
-    showSuggestion("Дебют начат заново.");
     resetTree(debutTree);
-
-    const historyDiv = document.getElementById('history');
-    historyDiv.innerHTML = '<span style="opacity: 0.3">1. ...</span>';
-
+    showSuggestion("Дебют начат заново.");
+    document.getElementById('history').innerHTML = '<span style="opacity: 0.3">1. ...</span>';
     playOpeningLine();
 });

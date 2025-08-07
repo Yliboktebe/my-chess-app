@@ -14,6 +14,14 @@ export const debutsList = [
         file: "siciliantrees.js",
         difficulty: 3,
         tags: ["контратака", "популярные"]
+    },
+    {
+        id: "central",
+        name: "Центральный дебют",
+        description: "Контроль над центром с первых ходов.",
+        file: "central/index",
+        difficulty: 1,
+        tags: ["открытые", "обучение"]
     }
-    // можно добавлять дальше
 ];
+

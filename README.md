@@ -7,27 +7,44 @@
 
 MY-CHESS-APP/
 ├── css/
-│   └── style.css                         ← Стили
-├── engine/
-│   ├── stockfish-*.wasm / .js           ← Stockfish WebAssembly
+│   └── style.css                     # 🎨 Основной файл стилей для интерфейса
+│
+├── engine/                           # ♟️ Локальная сборка Stockfish 17 (WASM + Web Worker)
+│   ├── stockfish-17-single-part.wasm
+│   ├── stockfish-17-single-part.worker.js
+│   ├── ... (другие вспомогательные файлы)
+│   └── stockfish-17-single.js       # JS-обёртка для инициализации движка
+│
 ├── img/
-│   └── chesspieces/wikipedia/           ← PNG-фигуры
-├── js/
-│   ├── core/                             ← Ядро
-│   │   ├── board.js
-│   │   ├── engine.js
-│   │   ├── main.js
-│   │   ├── tree-handler.js
-│   │   └── ui.js
-│   ├── trees/                            ← Деревья дебютов
-│   │   ├── italiantrees.js
-│   │   └── siciliantrees.js             ← (добавишь)
-│   └── debuts.js                         ← Реестр всех дебютов
-├── debut.html                            ← Универсальный обучающий экран
-├── debuts.html                           ← Экран выбора дебютов
-├── index.html                            ← Приветствие
-└── README.md                             ← Документация
-
+│   └── chesspieces/
+│       └── wikipedia/               # 📦 Изображения шахматных фигур
+│           ├── bB.png, wP.png ...   # PNG иконки фигур (чёрные/белые)
+│
+├── js/                              
+│   ├── core/                        # 🧠 Основная логика приложения
+│   │   ├── board.js                # Инициализация и управление шахматной доской
+│   │   ├── engine.js               # Взаимодействие с Stockfish (оценка, анализ)
+│   │   ├── main.js                 # Центральный модуль: управление игрой и состоянием
+│   │   ├── tree-handler.js         # Работа с обучающим деревом: проверка ходов, подсказки
+│   │   └── ui.js                   # Интерфейс: подсказки, история ходов, визуальные элементы
+│   │
+│   ├── trees/                      # 🌳 Деревья дебютов
+│   │   ├── central/                # Центральный дебют (ветки и openingLine)
+│   │   └── italian/                # Итальянская партия (ветки и openingLine)
+│   │
+│   └── debuts.js                   # 📋 Список всех доступных дебютов (id, названия, пути)
+│
+├── tools/
+│   └── parsers/                    # 🛠️ Вспомогательные инструменты для генерации деревьев
+│       ├── central.json           # 🔄 Результат парсинга central.pgn в нужный JSON-формат
+│       ├── central.pgn            # 📥 Оригинальный PGN-файл (сырой вход)
+│       └── parse_pgn.py           # 🐍 Python-скрипт для парсинга PGN → JSON-дерево
+│
+├── debut.html                      # 🧾 Страница обучения конкретному дебюту
+├── debuts.html                     # 📚 Страница выбора дебюта
+├── index.html                      # 🏠 Главная страница приложения
+├── .gitignore                      # ⚙️ Игнорируемые Git-файлы
+└── README.md                       # 📖 Документация проекта (инструкция, цели и структура)
 
 ## 🔧 Технологии
 - HTML, CSS, JS (ES-модули)

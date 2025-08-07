@@ -1,0 +1,25 @@
+{
+  "name": "my-chess-app",
+  "version": "1.0.0",
+  "description": "Обучающее шахматное приложение с фокусом на изучение дебютов.  \r Минималистичный, адаптивный WebApp с поддержкой Stockfish и теоретических деревьев.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yliboktebe/my-chess-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yliboktebe/my-chess-app/issues"
+  },
+  "homepage": "https://github.com/Yliboktebe/my-chess-app#readme",
+  "devDependencies": {
+    "vite": "^7.1.0"
+  }
+}
